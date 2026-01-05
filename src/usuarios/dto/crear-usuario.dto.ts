@@ -1,4 +1,6 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { TipoUsuario } from '../usuario.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CrearUsuarioDto {
   @IsEmail({}, { message: 'El formato del correo es inválido' })

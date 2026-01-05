@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { ROLES_KEY } from "../decorators/roles.decorator";
 import { TipoUsuario } from "src/usuarios/usuario.entity";
@@ -14,7 +14,16 @@ export class RolesGuard implements CanActivate {
     ]);
     if (!requiredRoles) return true;
 
-    const { user } = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
+    const user = request.user;
+
+    if (!user) {
+      throw new UnauthorizedException('No se encontró el usuario en la petición.');
+    }
+
+    if (!user.rol) {
+      throw new ForbiddenException('El usuario no tiene un rol asignado.');
+    }
     return requiredRoles.some((role) => user.rol === role);
   }
 }

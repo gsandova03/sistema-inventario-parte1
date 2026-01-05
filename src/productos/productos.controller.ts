@@ -6,6 +6,8 @@ import { ActualizarProductoDto } from './dto/actualizar-producto.dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { TipoUsuario } from 'src/usuarios/usuario.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { LowStockQueryDto } from './dto/low-stock-query.dto';
 
 @Controller('productos')
 export class ProductosController {
@@ -16,36 +18,14 @@ export class ProductosController {
     return this.productosService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.productosService.findOne(id);
-  }
-
-  @Post('')
-  @UseGuards(JwtAuthGuard)
-  create(@Body() CrearProductoDto: CrearProductoDto, @GetUser() user: any) {
-    return this.productosService.create(CrearProductoDto, user);
-  }
-
-  @Put(':id')
-  @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: number, @Body() ActualizarProductoDto: ActualizarProductoDto, @GetUser() user: any) {
-    return this.productosService.update(id, ActualizarProductoDto, user);
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: number, @GetUser() user: any) {
-    return this.productosService.remove(id, user.userId);
-  }
-
-  // Parte 2 endpoints
-
   @Get('low-stock')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(TipoUsuario.ADMIN)
-  getLowStock(@Query('threshold') threshold: number) {
-    return this.productosService.findLowStockProducts(threshold);
+  getLowStock(@Query('threshold') threshold: LowStockQueryDto) {
+    return this.productosService.findLowStockProducts(threshold.threshold);
   }
+
+    // Parte 2 endpoints
 
   @Get('my-products')
   @UseGuards(JwtAuthGuard)
@@ -61,5 +41,29 @@ export class ProductosController {
     @GetUser() user: any,
   ) {
     return this.productosService.updateStock(id, stock, user);
+  }
+
+  
+  @Post('')
+  @UseGuards(JwtAuthGuard)
+  create(@Body() CrearProductoDto: CrearProductoDto, @GetUser() user: any) {
+    return this.productosService.create(CrearProductoDto, user);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.productosService.findOne(id);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  update(@Param('id') id: number, @Body() ActualizarProductoDto: ActualizarProductoDto, @GetUser() user: any) {
+    return this.productosService.update(id, ActualizarProductoDto, user);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: number, @GetUser() user: any) {
+    return this.productosService.remove(id, user.userId);
   }
 }

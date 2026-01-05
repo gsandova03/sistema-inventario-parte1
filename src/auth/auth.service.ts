@@ -27,7 +27,7 @@ async login(loginDto: LoginDto, res: Response) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, rol: user.rol };
 
     const token = await this.jwtService.signAsync(payload);
 
@@ -43,6 +43,7 @@ async login(loginDto: LoginDto, res: Response) {
       user: {
         email: user.email,
         nombre: user.nombre,
+        rol: user.rol,
       },
     });
   }

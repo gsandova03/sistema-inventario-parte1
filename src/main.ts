@@ -17,7 +17,7 @@ async function bootstrap() {
   }));
 
   const config = new DocumentBuilder()
-    .setTitle('API Sistema de inventario')
+    .setTitle('API Sistema de inventario part 2')
     .setDescription('API de prueba')
     .setVersion('1.0')
     .addTag('prueba')

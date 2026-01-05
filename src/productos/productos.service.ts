@@ -58,7 +58,8 @@ export class ProductosService {
     return this.productoRepositorio.find({ where: { creador_id: userId } });
   }
 
-  async findLowStockProducts(treshold: number = 10) {
+  async findLowStockProducts(treshold: number) {
+    console.log(treshold);
     return this.productoRepositorio.find({
       where: { stock: LessThan(treshold) },
       relations: ['categoria', 'creador'],

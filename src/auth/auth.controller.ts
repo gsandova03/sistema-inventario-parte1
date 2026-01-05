@@ -10,6 +10,7 @@ import { GetUser } from './decorators/get-user.decorator';
 import { Response } from 'express';
 import { Roles } from './decorators/roles.decorator';
 import { TipoUsuario } from 'src/usuarios/usuario.entity';
+import { RolesGuard } from './guards/roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -40,14 +41,14 @@ export class AuthController {
 
   @Get('users')
   @Roles(TipoUsuario.ADMIN)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   getAllUsers() {
     return this.userService.findAll();
   }
 
   @Patch('users/:id/role')
   @Roles(TipoUsuario.ADMIN)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   updateRole(@Param('id') id: number, @Body('rol') rol: TipoUsuario) {
     return this.userService.updateRole(id, { rol });
   }
