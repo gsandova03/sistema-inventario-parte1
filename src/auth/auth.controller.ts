@@ -11,6 +11,7 @@ import { Response } from 'express';
 import { Roles } from './decorators/roles.decorator';
 import { TipoUsuario } from 'src/usuarios/usuario.entity';
 import { RolesGuard } from './guards/roles.guard';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -46,10 +47,10 @@ export class AuthController {
     return this.userService.findAll();
   }
 
-  @Patch('users/:id/role')
+  @Post('users/:id/role')
   @Roles(TipoUsuario.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  updateRole(@Param('id') id: number, @Body('rol') rol: TipoUsuario) {
-    return this.userService.updateRole(id, { rol });
+  updateRole(@Param('id') id: number, @Body() rol: TipoUsuario) {
+    return this.userService.updateRole(id, rol );
   }
 }

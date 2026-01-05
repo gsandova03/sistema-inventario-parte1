@@ -5,8 +5,17 @@ import { ApiProperty } from '@nestjs/swagger';
 export class LowStockQueryDto {
   @ApiProperty({ required: false, default: 10 })
   @IsOptional()
-  @Type(() => Number) // <--- Esta línea convierte el string a número
+  @Type(() => Number)
   @IsInt()
   @Min(0)
   threshold?: number = 10;
+}
+
+export class ActualizarStockDto {
+  @ApiProperty({ required: false, default: 10 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  stock?: number = 10;
 }

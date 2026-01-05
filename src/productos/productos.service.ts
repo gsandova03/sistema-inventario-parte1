@@ -6,6 +6,7 @@ import { CrearProductoDto } from './dto/crear-producto.dto';
 import { ActualizarProductoDto } from './dto/actualizar-producto.dto';
 import { Categoria } from 'src/categorias/categoria.entity';
 import { TipoUsuario } from 'src/usuarios/usuario.entity';
+import { use } from 'passport';
 
 @Injectable()
 export class ProductosService {
@@ -33,9 +34,10 @@ export class ProductosService {
 
     if (!existe) throw new NotFoundException(`La categoría #${data.categoria_id} no existe`);
     
+    console.log(user);
     const product = this.productoRepositorio.create({
       ...data,
-      creador_id: user.id,
+      creador_id: user.userId,
     });
     return this.productoRepositorio.save(product);
   }
@@ -76,7 +78,7 @@ export class ProductosService {
   async validarCreador(productoId: number, user: any) {
     const producto = await this.findOne(productoId);
 
-    if(user.rol !== TipoUsuario.ADMIN && producto.creador_id !== user.id) {
+    if(user.rol !== TipoUsuario.ADMIN && producto.creador_id !== user.userId) {
       throw new NotFoundException(`No tienes permisos para editar este producto`);
     }
 

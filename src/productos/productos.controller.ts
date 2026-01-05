@@ -7,7 +7,7 @@ import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { TipoUsuario } from 'src/usuarios/usuario.entity';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { LowStockQueryDto } from './dto/low-stock-query.dto';
+import { ActualizarStockDto, LowStockQueryDto } from './dto/low-stock-query.dto';
 
 @Controller('productos')
 export class ProductosController {
@@ -21,8 +21,8 @@ export class ProductosController {
   @Get('low-stock')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(TipoUsuario.ADMIN)
-  getLowStock(@Query('threshold') threshold: LowStockQueryDto) {
-    return this.productosService.findLowStockProducts(threshold.threshold);
+  getLowStock(@Query('threshold') threshold: number) {
+    return this.productosService.findLowStockProducts(threshold);
   }
 
     // Parte 2 endpoints
@@ -30,6 +30,7 @@ export class ProductosController {
   @Get('my-products')
   @UseGuards(JwtAuthGuard)
   getMyProducts(@GetUser() user: any) {
+    console.log(user);
     return this.productosService.findMyProducts(user.userId);
   }
 
@@ -37,10 +38,10 @@ export class ProductosController {
   @UseGuards(JwtAuthGuard)
   updateStock(
     @Param('id') id: number,
-    @Body('stock', ParseIntPipe) stock: number,
+    @Body() stock: ActualizarStockDto,
     @GetUser() user: any,
   ) {
-    return this.productosService.updateStock(id, stock, user);
+    return this.productosService.updateStock(id, stock.stock, user);
   }
 
   

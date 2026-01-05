@@ -48,10 +48,12 @@ export class UsuariosService {
     return users;
   }
 
-  async updateRole(id: number, rol: { rol: TipoUsuario.ADMIN | TipoUsuario.USUARIO }) {
+  async updateRole(id: number, rol: TipoUsuario) {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) throw new Error('No se encontro el usuario');
-    user.rol = rol.rol;
-    return this.userRepository.save(user);
+    user.rol = rol;
+    delete user.password;
+    delete user.id;
+    return this.userRepository.update(user.id, user);
   }
 }
