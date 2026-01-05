@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Categoria } from '../categorias/categoria.entity';
+import { Usuario } from 'src/usuarios/usuario.entity';
 
 @Entity('products')
 export class Producto {
@@ -30,4 +31,11 @@ export class Producto {
 
   @Column()
   categoria_id: number;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.productos, { eager: true })
+  @JoinColumn({ name: 'creador_id' })
+  creador: Usuario;
+
+  @Column({ nullable: true })
+  creador_id: number;
 }
