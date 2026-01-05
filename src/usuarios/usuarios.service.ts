@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Usuario } from './usuario.entity';
+import { TipoUsuario, Usuario } from './usuario.entity';
 import { CrearUsuarioDto } from './dto/crear-usuario.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -41,5 +41,17 @@ export class UsuariosService {
       throw new Error('No se encontro el usuario');
     }
     return user;
+  }
+
+  async findAll() {
+    const users = await this.userRepository.find({ select: ['id', 'nombre', 'email'] });
+    return users;
+  }
+
+  async updateRole(id: number, rol: { rol: TipoUsuario.ADMIN | TipoUsuario.USUARIO }) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new Error('No se encontro el usuario');
+    user.rol = rol.rol;
+    return this.userRepository.save(user);
   }
 }
