@@ -3,6 +3,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ProductosService } from './productos.service';
 import { CrearProductoDto } from './dto/crear-producto.dto';
 import { ActualizarProductoDto } from './dto/actualizar-producto.dto';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 
 @Controller('productos')
 export class ProductosController {
@@ -21,8 +22,8 @@ export class ProductosController {
 
   @Post('')
   @UseGuards(JwtAuthGuard)
-  create(@Body() CrearProductoDto: CrearProductoDto) {
-    return this.productosService.create(CrearProductoDto);
+  create(@Body() CrearProductoDto: CrearProductoDto, @GetUser() user: any) {
+    return this.productosService.create(CrearProductoDto, user);
   }
 
   @Put(':id')
@@ -36,4 +37,6 @@ export class ProductosController {
   remove(@Param('id') id: number) {
     return this.productosService.remove(id);
   }
+
+  // Parte 2 endpoints
 }
