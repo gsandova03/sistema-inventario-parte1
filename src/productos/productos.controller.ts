@@ -1,29 +1,33 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('productos')
 export class ProductosController {
   @Get('')
   findAll() {
-    // return this.productosService.findAll();
+    return 'todos los productos';
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    // return this.categoriasService.findOne(id);
+    return 'producto por id';
   }
 
   @Post('')
-  create(@Body() createCategoriaDto: CreateCategoriaDto) {
-    // return this.categoriasService.create(createCategoriaDto);
+  @UseGuards(JwtAuthGuard)
+  create(@Body() createCategoriaDto) {
+    return 'crear producto';
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateCategoriaDto: UpdateCategoriaDto) {
-    // return this.categoriasService.update(id, updateCategoriaDto);
+  @UseGuards(JwtAuthGuard)
+  update(@Param('id') id: string, @Body() updateCategoriaDto) {
+    return 'actualizar producto';
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
-    // return this.categoriasService.remove(id);
+    return 'eliminar producto';
   }
 }
