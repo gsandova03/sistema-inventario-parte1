@@ -34,16 +34,22 @@ npm install
 3. **Configurar variables de entorno:**
 Crea un archivo `.env` en la raíz del proyecto basándote en la siguiente configuración, tambien se puede usar el archivo `.env.template`:
 ```env
-# Base de Datos
+ENV=dev
+
+# Configuración de Base de Datos
 DB_HOST=localhost
 DB_PORT=5432
-DB_USERNAME=nestuser
-DB_PASSWORD=nestpassword
-DB_NAME=nestdb
-DB_SYNCHRONIZE=true
+DB_USERNAME=
+DB_PASSWORD=
+DB_NAME=
 
-# Autenticación
-JWT_SECRET=tu_clave_secreta_super_segura
+PORT=4000
+HOST_API=http://localhost:4000/api
+
+JWT_SECRET=
+AUTH_TOKEN=auth_token_cookie
+
+TOKEN=prueba1
 
 ```
 
