@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EnvConfiguration } from './config/env.config';
+import { CategoriasModule } from './categorias/categorias.module';
+import { ProductosModule } from './productos/productos.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [
@@ -17,7 +20,10 @@ import { EnvConfiguration } from './config/env.config';
       database: EnvConfiguration().dbName,
       autoLoadEntities: true,
       synchronize: true,
-    })
+    }),
+    CategoriasModule,
+    ProductosModule,
+    UsuariosModule,
   ],
   controllers: [],
   providers: [],
