@@ -30,7 +30,8 @@ export class UsuariosService {
     });
 
     const savedUser = await this.userRepository.save(newUser);
-    
+    delete savedUser.password
+    delete savedUser.id
     return savedUser;
   }
 }
