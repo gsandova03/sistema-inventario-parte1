@@ -1,12 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+  app.use(cookieParser());
 
   app.setGlobalPrefix('api');
+
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }));
 
   const config = new DocumentBuilder()
     .setTitle('API Sistema de inventario')
@@ -25,5 +33,6 @@ async function bootstrap() {
   });
   
   await app.listen(process.env.PORT || 3000);
+  console.log(`Server is running on port ${process.env.PORT || 3000}`);
 }
 bootstrap();

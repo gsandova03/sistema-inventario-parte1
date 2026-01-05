@@ -5,6 +5,7 @@ import { EnvConfiguration } from './config/env.config';
 import { CategoriasModule } from './categorias/categorias.module';
 import { ProductosModule } from './productos/productos.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
     CategoriasModule,
     ProductosModule,
     UsuariosModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
