@@ -24,7 +24,7 @@ export class Producto {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Categoria, (categoria) => categoria.productos, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Categoria, (categoria) => categoria.productos, { onDelete: 'CASCADE', eager: true })
   @JoinColumn({ name: 'categoria_id' })
   categoria: Categoria;
 
