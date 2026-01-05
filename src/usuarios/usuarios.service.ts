@@ -34,4 +34,12 @@ export class UsuariosService {
     delete savedUser.id
     return savedUser;
   }
+
+  async findeUsuarioByEmail(email: string): Promise<Usuario> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (!user) {
+      throw new Error('No se encontro el usuario');
+    }
+    return user;
+  }
 }
