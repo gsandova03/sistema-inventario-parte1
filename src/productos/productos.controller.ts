@@ -1,13 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ProductosService } from './productos.service';
 import { CrearProductoDto } from './dto/crear-producto.dto';
 import { ActualizarProductoDto } from './dto/actualizar-producto.dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { TipoUsuario } from 'src/usuarios/usuario.entity';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('productos')
 export class ProductosController {
-
   constructor(private readonly productosService: ProductosService) {}
 
   @Get('')
@@ -28,15 +29,37 @@ export class ProductosController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: number, @Body() ActualizarProductoDto: ActualizarProductoDto) {
-    return this.productosService.update(id, ActualizarProductoDto);
+  update(@Param('id') id: number, @Body() ActualizarProductoDto: ActualizarProductoDto, @GetUser() user: any) {
+    return this.productosService.update(id, ActualizarProductoDto, user);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: number) {
-    return this.productosService.remove(id);
+  remove(@Param('id') id: number, @GetUser() user: any) {
+    return this.productosService.remove(id, user.userId);
   }
 
   // Parte 2 endpoints
+
+  @Get('low-stock')
+  @Roles(TipoUsuario.ADMIN)
+  getLowStock(@Query('threshold') threshold: number) {
+    return this.productosService.findLowStockProducts(threshold);
+  }
+
+  @Get('my-products')
+  @UseGuards(JwtAuthGuard)
+  getMyProducts(@GetUser() user: any) {
+    return this.productosService.findMyProducts(user.userId);
+  }
+
+  @Put(':id/stock')
+  @UseGuards(JwtAuthGuard)
+  updateStock(
+    @Param('id') id: number,
+    @Body('stock', ParseIntPipe) stock: number,
+    @GetUser() user: any,
+  ) {
+    return this.productosService.updateStock(id, stock, user);
+  }
 }
